@@ -1,0 +1,66 @@
+<a href="/board/index">홈</a>
+<div class="alert alert-success" role="alert">
+    <%= @board.title %></br>
+    <%= @board.user.email%></br>
+    <%= @board.contente%></br>
+    <%= @board.created_at%></br>
+    
+    <input type="button" value="수정" onclick="getValue();" class="btn btn-outline-danger"/>   
+    <input type="button" value="삭제" onclick="getValue2();" class="btn btn-outline-danger"/>      
+    <input type="hidden" id="password" value="<%= @board.password %>"/>   
+</div>
+  <%= label_tag(:content, "댓글") %>
+  <%= hidden_field_tag(:board_id, @board.id) %>
+<%= text_field_tag(:content) %>
+<%= submit_tag("작성",id: "submit") %>
+
+<div class="merong">
+  <% @comments.each do |c| %>
+          <%= c.content%><%= c.created_at%></br>
+  <% end %>
+
+</div>
+
+<script type="text/javascript"> 
+    
+    $("#submit").click(function(){
+        content = $("#content").val();
+      board_id = $("#board_id").val();
+        $.ajax({
+          method: "POST",
+          url: "/board/comment_create",
+          data: { content:content, board_id:board_id},
+          success:function(){
+            alert("리플이 작성되었습니다.");
+            $(".merong").prepend(content+"<br>");
+            $("#content").val("");
+          },
+          error:function(){
+            alert("리플이 작성되지않았습니다.");
+
+          }
+        })
+             
+    });
+    
+    /*function getValue(){               
+    var password = document.getElementById('password').value;  
+    var board_id = document.getElementById('board_id').value;  
+                  
+    location.href="/board/"+board_id+"/edit";         
+       
+    }    
+    
+    function getValue2(){   
+    var password = document.getElementById('password').value;  
+    var board_id = document.getElementById('board_id').value;   
+      
+    location.href="/board/"+board_id+"/delete"; 
+              
+    }*/      
+    
+</script>
+
+
+
+
